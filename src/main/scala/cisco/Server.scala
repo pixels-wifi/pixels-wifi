@@ -110,7 +110,7 @@ object Server extends App {
           }
         }
       }
-    }
+    } ~ getFromResourceDirectory("dist") ~ getFromResource("dist/index.html")
 
   val bindingFuture = Http().bindAndHandle(route, "0.0.0.0", 8080)
   bindingFuture.onComplete(_ => println("Server running on localhost:8080"))
