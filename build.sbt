@@ -1,6 +1,6 @@
 import scalariform.formatter.preferences._
 
-name := "cisco-explorer"
+name := "camp-wifi-server"
 
 organization := "cisco"
 
@@ -35,3 +35,6 @@ scalariformSettings
 ScalariformKeys.preferences := ScalariformKeys.preferences.value
   .setPreference(AlignParameters, true)
   .setPreference(DoubleIndentClassDeclaration, true)
+
+enablePlugins(JavaAppPackaging)
+dockerRepository := Some("pixelscamp.azurecr.io")

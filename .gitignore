@@ -21,3 +21,4 @@ _site
 
 node_modules
 data/*.json
+data_cache/*.json

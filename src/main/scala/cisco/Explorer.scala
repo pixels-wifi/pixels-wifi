@@ -4,7 +4,8 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.model.headers.{ Authorization, BasicHttpCredentials }
 import akka.stream.ActorMaterializer
 import akka.util.ByteString
-import java.io.File
+import java.io.{ File, PrintWriter }
+import java.nio.file.{ Paths, Files }
 
 import scala.collection.mutable
 import scala.concurrent._
@@ -20,6 +21,7 @@ import cisco.model.AccessPoint
 
 object Explorer {
   val DATA_DIR = "data"
+  val DATA_CACHE = "data_cache"
 
   case class Entry(macAddress: String, status: String, currentApName: Option[String], rssi: Double)
   case class AccessPointStatus(goodUsers: Long, badUsers: Long, avgRssi: Double)
@@ -85,8 +87,19 @@ object Explorer {
   }
 
   def getAccessPointStatus(start: DateTime, end: DateTime): Map[String, AccessPointStatus] = {
-    val files = Explorer.getFiles(start, end)
-    parseStrings(files.map(file => Source.fromFile(DATA_DIR + "/" + file).getLines.mkString))
+    val startTs = start.getMillis
+    val endTs = end.getMillis
+    val filename = s"$DATA_CACHE/$startTs-$endTs.json"
+    if (Files.exists(Paths.get(filename)))
+      Source.fromFile(filename).getLines.mkString.parseJson.convertTo[Map[String, AccessPointStatus]]
+    else {
+      val files = Explorer.getFiles(start, end)
+      val res = parseStrings(files.map(file => Source.fromFile(DATA_DIR + "/" + file).getLines.mkString))
+      val writer = new PrintWriter(new File(filename))
+      writer.write(res.toJson.compactPrint)
+      writer.close()
+      res
+    }
   }
 
   def current()(implicit system: ActorSystem, ec: ExecutionContext, mat: ActorMaterializer): Future[Map[String, AccessPointStatus]] =
