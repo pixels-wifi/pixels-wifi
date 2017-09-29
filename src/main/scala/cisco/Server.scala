@@ -1,6 +1,8 @@
 package cisco
 
+import akka.util.Timeout
 import scala.concurrent.ExecutionContext
+import scala.concurrent.duration._
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
@@ -14,6 +16,8 @@ import org.joda.time.DateTime
 import spray.json._
 import spray.json.DefaultJsonProtocol._
 
+import cisco.Explorer._
+
 object Server extends App {
   implicit val system: ActorSystem = ActorSystem()
   implicit val materializer: ActorMaterializer = ActorMaterializer()
@@ -23,23 +27,27 @@ object Server extends App {
   def talksForTimestamp(ts: Long) = talks.map(_.filter(t => t.start.getMillis <= ts && t.end.getMillis > ts))
   talks.onComplete(_ => println("Talks loaded!"))
 
-  case class AccessPointStatus(goodUsers: Long, badUsers: Long, avgRssi: Double)
   case class TalkStatus(name: String, numAtendees: Long, timeSeries: List[Long])
   case class Status(accessPoints: Map[String, AccessPointStatus], talks: Map[Stage, TalkStatus])
 
   def talkStatus(talk: Talk): TalkStatus = {
     val timeseries = (talk.start.getMillis to talk.end.getMillis by 60000).toList.map(ms => new DateTime(ms)).sliding(2)
       .collect {
-        case s :: e :: Nil => Explorer.getAverageUsersPerAp(s, e)
-      }.map { _.filter { case (ap, _) => talk.location.aps.contains(ap) }.values.sum }.toList
+        case s :: e :: Nil => Explorer.getAccessPointStatus(s, e)
+      }.map {
+        _.filter { case (ap, _) => talk.location.aps.contains(ap) }.values.map {
+          case AccessPointStatus(g, b, _) => g + b
+        }.sum
+      }.toList
     TalkStatus(
       talk.name,
-      Explorer.getAverageUsersPerAp(talk.start, talk.end)
-        .filter { case (ap, _) => talk.location.aps.contains(ap) }.values.sum,
+      Explorer.getAccessPointStatus(talk.start, talk.end)
+        .filter { case (ap, _) => talk.location.aps.contains(ap) }.values.map {
+          case AccessPointStatus(g, b, _) => g + b
+        }.sum,
       timeseries)
   }
 
-  implicit val accessPointJF: RootJsonFormat[AccessPointStatus] = jsonFormat3(AccessPointStatus)
   implicit val talkJF: RootJsonFormat[TalkStatus] = jsonFormat3(TalkStatus)
   implicit val statusJF: RootJsonFormat[Status] = jsonFormat2(Status)
 
@@ -53,7 +61,7 @@ object Server extends App {
           val runningTalks = talksForTimestamp(timestamp).map(_.groupBy(_.location).mapValues(t => talkStatus(t.head)))
 
           // TODO remove dummy data
-          runningTalks.map(rt => Status(Map("AP1" -> AccessPointStatus(1, 2, 3)), rt))
+          runningTalks.map(rt => Status(Explorer.getAccessPointStatus(new DateTime(timestamp), new DateTime(timestamp + 3600000)), rt))
         }))
       }
     }
