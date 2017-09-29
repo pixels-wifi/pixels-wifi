@@ -1,10 +1,17 @@
 package cisco
 
+import akka.actor.ActorSystem
+import akka.http.scaladsl.model.headers.{ Authorization, BasicHttpCredentials }
+import akka.stream.ActorMaterializer
+import akka.util.ByteString
 import java.io.File
 
 import scala.collection.mutable
+import scala.concurrent._
 import scala.io.Source
 
+import akka.http.scaladsl.Http
+import akka.http.scaladsl.model.HttpRequest
 import com.github.nscala_time.time.Imports._
 import spray.json._
 import spray.json.DefaultJsonProtocol._
@@ -34,12 +41,11 @@ object Explorer {
       Seq.empty[String]
   }
 
-  def getAccessPointStatus(start: DateTime, end: DateTime): Map[String, AccessPointStatus] = {
-    val files = Explorer.getFiles(start, end)
+  def parseStrings(strs: Seq[String]): Map[String, AccessPointStatus] = {
     val mt = mutable.Map[String, (Set[String], Set[String], Double)]()
-    files.foreach { file =>
+    strs.foreach { str =>
       try {
-        val json = Source.fromFile(DATA_DIR + "/" + file).getLines.mkString.parseJson
+        val json = str.parseJson
         val entries = json match {
           case JsArray(v) => v.map(_.convertTo[Entry])
           case _ => Seq.empty
@@ -69,12 +75,25 @@ object Explorer {
         }
       } catch {
         case _: Exception =>
-          println(s"Failed to parse ${file}")
+          println("Failed to parse JSON")
       }
     }
     (AccessPoint.empty ++ mt.mapValues {
       case (g, b, r) =>
-        AccessPointStatus(g.size, b.diff(g).size, r / files.size)
+        AccessPointStatus(g.size, b.diff(g).size, r / strs.size)
     }.toMap).filter { case (k, _) => AccessPoint.list.contains(k) }.toMap
   }
+
+  def getAccessPointStatus(start: DateTime, end: DateTime): Map[String, AccessPointStatus] = {
+    val files = Explorer.getFiles(start, end)
+    parseStrings(files.map(file => Source.fromFile(DATA_DIR + "/" + file).getLines.mkString))
+  }
+
+  def current()(implicit system: ActorSystem, ec: ExecutionContext, mat: ActorMaterializer): Future[Map[String, AccessPointStatus]] =
+    Http().singleRequest(
+      HttpRequest(uri = "https://53cdgr.cmxcisco.com/api/presence/v1/clients?siteId=1505913182364")
+        .addHeader(Authorization(BasicHttpCredentials("cGl4ZWxzY2FtcEBjaXNjby5jb206cGl4ZWxzY2FtcDIwMTc=")))).flatMap { res =>
+        val str = res.entity.dataBytes.runFold(ByteString(""))(_ ++ _).map(_.utf8String)
+        str.map { s => parseStrings(Seq(s)) }
+      }
 }
