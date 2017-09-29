@@ -77,11 +77,11 @@ class Marker extends React.Component {
               </div>
               <div>
                 <span>Active connections</span>
-                <span>{count}</span>
+                <span>{count || "-"}</span>
               </div>
               <div>
                 <span>Signal strength</span>
-                <span>{className}</span>
+                <span>{className || "-"}</span>
               </div>
             </div>
           }
