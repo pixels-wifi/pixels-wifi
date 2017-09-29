@@ -110,6 +110,17 @@ object Server extends App {
           }
         }
       }
+    } ~ path("all") {
+      get {
+        respondWithHeader(`Access-Control-Allow-Origin`.`*`) {
+          val curr = new DateTime().getMillis
+          val currAligned = (curr / 3600000) * 3600000
+          val fs = (START_TIMESTAMP until currAligned by 3600000).map { ts =>
+            statusCache(ts, status(ts)).map { res => ts.toString -> res }
+          }
+          complete(Future.sequence(fs).map(_.toMap))
+        }
+      }
     } ~ getFromResourceDirectory("dist") ~ getFromResource("dist/index.html")
 
   val bindingFuture = Http().bindAndHandle(route, "0.0.0.0", 8080)
