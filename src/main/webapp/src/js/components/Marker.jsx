@@ -51,11 +51,11 @@ class Marker extends React.Component {
 
     let className = "";
     if (quality > -20)
-      className = "good"
+      className = "Good"
     else if (quality > -40)
-      className = "avg"
+      className = "Average"
     else if (quality <= -40)
-      className = "bad";
+      className = "Bad";
 
     // console.log(x, y, count, diameter);
 
@@ -70,7 +70,20 @@ class Marker extends React.Component {
           {this.state.hovering &&
             <div className="count-text"
                  style={{position: "absolute"}}
-                 {...this.hoverProps()}>{name} {count}</div>
+                 {...this.hoverProps()}>
+              <div>
+                <span>AP name</span>
+                <span>{name}</span>
+              </div>
+              <div>
+                <span>Active connections</span>
+                <span>{count}</span>
+              </div>
+              <div>
+                <span>Signal strength</span>
+                <span>{className}</span>
+              </div>
+            </div>
           }
         </div>
       </div>

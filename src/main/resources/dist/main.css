@@ -43,15 +43,32 @@
       background-color: rgba(211, 211, 211, 0.44);
       -webkit-transition: height 0.1s ease-out, width 0.1s ease-out, background 0.2s;
       transition: height 0.1s ease-out, width 0.1s ease-out, background 0.2s; }
-      .marker-container .marker-inner .spread-circle.good {
+      .marker-container .marker-inner .spread-circle.Good {
         background-color: rgba(159, 195, 166, 0.44); }
-      .marker-container .marker-inner .spread-circle.avg {
+      .marker-container .marker-inner .spread-circle.Average {
         background-color: rgba(232, 219, 40, 0.44); }
-      .marker-container .marker-inner .spread-circle.bad {
+      .marker-container .marker-inner .spread-circle.Bad {
         background-color: rgba(197, 123, 123, 0.44); }
     .marker-container .marker-inner .count-text {
+      position: absolute;
+      z-index: 999999;
       margin-top: 5px;
-      margin-left: 5px; }
+      margin-left: 5px;
+      background-color: white;
+      padding: 5px 15px;
+      -webkit-box-shadow: 0px 1px 10px 1px grey;
+              box-shadow: 0px 1px 10px 1px grey; }
+      .marker-container .marker-inner .count-text div span {
+        display: block;
+        word-break: keep-all;
+        white-space: pre; }
+      .marker-container .marker-inner .count-text div span:first-child {
+        margin-top: 5px;
+        font-weight: bolder;
+        display: block;
+        color: black; }
+      .marker-container .marker-inner .count-text div span:last-child {
+        margin-bottom: 5px; }
 
 /*!
  * antd v2.11.2

@@ -51,22 +51,44 @@
       transition: height 0.1s ease-out, width 0.1s ease-out, background 0.2s;
               //border: 1px solid rgba(128, 128, 128, 0.51);
 
-      &.good {
+      &.Good {
         background-color: rgba(159, 195, 166, 0.44);
       }
 
-      &.avg {
+      &.Average {
         background-color: rgba(232, 219, 40, 0.44);
       }
 
-      &.bad {
+      &.Bad {
         background-color: rgba(197, 123, 123, 0.44);
       }
     }
 
     .count-text {
+      position: absolute;
+      z-index: 999999;
       margin-top: 5px;
       margin-left: 5px;
+      background-color: white;
+      padding: 5px 15px;
+      box-shadow: 0px 1px 10px 1px grey;
+
+      div span {
+        display: block;
+        word-break: keep-all;
+        white-space: pre;
+      }
+
+      div span:first-child {
+        margin-top: 5px;
+        font-weight: bolder;
+        display: block;
+        color: black;
+      }
+
+      div span:last-child {
+        margin-bottom: 5px;
+      }
     }
   }
 }

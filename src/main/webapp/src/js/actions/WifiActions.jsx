@@ -47,9 +47,10 @@ const WifiActions = {
     //       data: mock
     //     });
     // }, 100)
-// "http://88.157.243.197:8080" +
+
     this.request({
-      url:  "/api",
+      url: "http://88.157.243.197:8080" + "/api",
+      // url:  "/api",
       params: params
     }).then(data => {
       AppDispatcher.dispatchNext({
