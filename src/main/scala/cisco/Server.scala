@@ -60,7 +60,6 @@ object Server extends App {
           println("Computing status for " + timestamp)
           val runningTalks = talksForTimestamp(timestamp).map(_.groupBy(_.location).mapValues(t => talkStatus(t.head)))
 
-          // TODO remove dummy data
           runningTalks.map(rt => Status(Explorer.getAccessPointStatus(new DateTime(timestamp), new DateTime(timestamp + 3600000)), rt))
         }))
       }
