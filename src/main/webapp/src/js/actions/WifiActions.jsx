@@ -1,9 +1,12 @@
 import qajaxWrapper from "app/helpers/qajaxWrapper";
 import moment from "moment";
+import _ from "lodash";
 
 import AppDispatcher from "app/AppDispatcher";
 import WifiEvents from "app/events/wifi";
 import WifiConstants from "app/constants/wifi";
+
+import WifiStore from "app/stores/WifiStore";
 import mock from "app/constants/mock";
 
 const WifiActions = {
@@ -13,9 +16,20 @@ const WifiActions = {
 
     if (tick) {
       const ts = moment(WifiConstants.initial_data_timestamp).add(tick, "hour").unix() * 1000;
-      console.log(WifiConstants.initial_data_timestamp, ts);
       id = ts;
       params["ts"] = ts;
+      if (_.has(WifiStore.get(id), "data.accessPoints")) {
+        AppDispatcher.dispatchNext({
+          actionType: WifiEvents.REQUEST_GET,
+          id: id
+        });
+
+        AppDispatcher.dispatchNext({
+          actionType: WifiEvents.REQUEST_GET_CACHED,
+          id: id
+        });
+        return;
+      }
     } else {
       id = "live"
     }
@@ -33,9 +47,9 @@ const WifiActions = {
     //       data: mock
     //     });
     // }, 100)
-
+// "http://88.157.243.197:8080" +
     this.request({
-      url: "/api",
+      url:  "/api",
       params: params
     }).then(data => {
       AppDispatcher.dispatchNext({

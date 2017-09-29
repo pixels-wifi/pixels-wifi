@@ -20,12 +20,13 @@
       border-radius: 50%;
       width: 12px;
       height: 12px;
-      background-color: #4688F1;
+      background-color: #696969; //#4688F1;
       border: 1px solid white;
       box-shadow: 1px 1px 5px 0 rgba(0, 0, 0, 0.59);
       cursor: pointer;
       transform: translate(-50%, -50%);
       transition: background 0.3s;
+      z-index: 999;
 
       &:hover {
         background-color: #3b5fba;
@@ -47,7 +48,20 @@
       border-radius: 50%;
       transform: translate(-50%, -50%);
       background-color: rgba(211, 211, 211, 0.44);
-      //border: 1px solid rgba(128, 128, 128, 0.51);
+      transition: height 0.1s ease-out, width 0.1s ease-out, background 0.2s;
+              //border: 1px solid rgba(128, 128, 128, 0.51);
+
+      &.good {
+        background-color: rgba(159, 195, 166, 0.44);
+      }
+
+      &.avg {
+        background-color: rgba(232, 219, 40, 0.44);
+      }
+
+      &.bad {
+        background-color: rgba(197, 123, 123, 0.44);
+      }
     }
 
     .count-text {

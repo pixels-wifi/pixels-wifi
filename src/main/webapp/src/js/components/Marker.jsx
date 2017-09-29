@@ -19,14 +19,16 @@ class Marker extends React.Component {
 
   countToDiameter(count) {
     var d = 1, steps = 6;
-    if (count < 3) {
+    if (count === 0) {
+      d = 0;
+    } else if (count < 3) {
       d = 1;
     } else if (count > 200) {
       d = steps;
     } else if (count) {
-      d = count / 200 * steps;
+      d = Math.max(1, count / 200 * steps);
     }
-    return d * 35;
+    return d * 30;
   }
 
   hovering(bool) {
@@ -47,12 +49,20 @@ class Marker extends React.Component {
 
     const diameter = this.countToDiameter(count);
 
-    console.log(x, y, count, diameter);
+    let className = "";
+    if (quality > -20)
+      className = "good"
+    else if (quality > -40)
+      className = "avg"
+    else if (quality <= -40)
+      className = "bad";
+
+    // console.log(x, y, count, diameter);
 
     return (
       <div className="marker-container" style={{top: y, left: x}}>
         <div className="marker-inner">
-          <div className="spread-circle"
+          <div className={"spread-circle "+className}
                style={{ width: diameter, height: diameter }}/>
           <div className="hover-circle"
                {...this.hoverProps()}/>

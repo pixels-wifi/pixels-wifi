@@ -4,6 +4,7 @@ const WifiEvents = pathMirror({
   WIFI_EVENTS: {
     REQUEST_GET: null,
     REQUEST_GET_SUCCESS: null,
+    REQUEST_GET_CACHED: null,
     REQUEST_GET_ERROR: null
   }
 });

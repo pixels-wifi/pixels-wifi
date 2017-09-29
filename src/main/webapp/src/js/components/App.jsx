@@ -1,19 +1,19 @@
 import React from "react";
-import Map from "./Map";
-import Marker from "./Marker";
 
-import stages from "app/constants/stages";
+import PopulatedSlider from "./PopulatedSlider";
 import PopulatedMap from "./PopulatedMap";
+import InfoPanel from "./InfoPanel";
 
 class App extends React.Component {
 
   render() {
     return (
       <div style={{marginTop: 100}}>
-        <h1 className="pixels-font">
-          Wireless coverage
-        </h1>
+        <div style={{height: 20}}></div>
+        <PopulatedSlider />
+        <div style={{marginBottom: 60}}></div>
         <PopulatedMap />
+        <InfoPanel />
       </div>
     );
   }

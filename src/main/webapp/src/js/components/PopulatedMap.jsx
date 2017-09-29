@@ -1,4 +1,5 @@
 import React from "react";
+import moment from "moment";
 
 import Map from "./Map"
 
@@ -7,6 +8,7 @@ import SliderStore from "app/stores/SliderStore";
 
 import WifiActions from "app/actions/WifiActions";
 
+import WifiConstants from "app/constants/wifi";
 import stages from "app/constants/stages";
 import Marker from "./Marker";
 
@@ -36,39 +38,34 @@ class PopulatedMap extends React.Component {
     SliderStore.removeListener("change", this.onSliderStoreChange);
   }
 
-  startLivePolling() {
-    // WifiActions.get();
-    // this.cancel = setTimeout(() => {
-    //   WifiActions.get();
-    // }, 10000);
-  }
-
-  cancelLivePolling() {
+  cancelLivePolling = () => {
     if (this.cancel)
       clearInterval(this.cancel);
-  }
+  };
 
-  onSliderStoreChange() {
+  onSliderStoreChange = () => {
     const id = SliderStore.get();
     if (id === "live") {
       WifiActions.get();
-      // this.startLivePolling();
     } else {
       this.cancelLivePolling();
       WifiActions.get(id);
     }
-  }
+  };
 
   onWifiStoreChange = (id) => {
-    if (id === SliderStore.get()) {
+    console.log("wifi store changed", id, SliderStore.get());
+    const sliderId = moment(WifiConstants.initial_data_timestamp).add(SliderStore.get(), "hour").unix() * 1000;
+    if (id === sliderId || (id === "live" && SliderStore.get() === "live")) {
       this.cancelLivePolling();
-      this.cancel = setTimeout(() => WifiActions.get(), 2500);
+      if (id === "live") {
+        this.cancel = setTimeout(() => WifiActions.get(), 1000);
+      }
       this.setState({...WifiStore.get(id)})
     }
   };
   
   render() {
-    console.log(this.state);
     const stateData = this.state.data;
     const data = stages.map(s => {
       var rest = {};
@@ -76,6 +73,7 @@ class PopulatedMap extends React.Component {
         const apData = stateData.accessPoints[s.title];
         if (apData) {
           rest["count"] = apData.goodUsers + apData.badUsers;
+          rest["quality"] = apData.avgRssi;
         }
       }
       return <Marker key={s.title} name={s.title} x={s.left} y={s.top} {...rest} />

@@ -1,4 +1,5 @@
 @import "map";
+@import "antd/dist/antd";
 
 html,body {
   margin: 0;
@@ -10,7 +11,7 @@ html,body {
 @font-face { font-family: "Avant Pixel"; src: url('/fonts/avant_pixel.woff2'); }
 
 .pixels-font {
-  font-family: "Avant Pixel";
+  font-family: "Avant Pixel", sans-serif;
 }
 
 .main-outer {
@@ -42,6 +43,7 @@ html,body {
   text-align: center;
   width: 100%;
   z-index: -2;
+  top: 14px;
 }
 
 .container {
@@ -97,4 +99,17 @@ html,body {
 body {
   font-family: Lato;
   position: relative;
+}
+
+.info-panel-container {
+  position: absolute;
+  top: 100px;
+  left: 723px;
+  width: 227px;
+
+  div {
+    font-size: 160%;
+    float: right;
+    color: #929597;
+  }
 }

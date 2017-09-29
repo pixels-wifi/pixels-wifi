@@ -9,6 +9,10 @@ const AbstractIdStore = () => lazy(EventEmitter.prototype).extend({
     error: false
   },
 
+  refresh: function(action) {
+    this.emit("change", action.id);
+  },
+
   getItem: function (id) {
     return this._data[id] || this.defaultItem();
   },

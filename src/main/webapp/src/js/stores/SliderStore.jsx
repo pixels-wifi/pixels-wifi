@@ -9,7 +9,7 @@ var current = "live";
 const SliderStore = lazy(EventEmitter.prototype).extend({
   set(id) {
     current = id;
-    emit(id);
+    this.emit("change", id);
   },
   get() {
     return current;
@@ -19,6 +19,7 @@ const SliderStore = lazy(EventEmitter.prototype).extend({
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
     case SliderEvents.CHANGE_SLIDER:
+      console.log("store", action.id);
       SliderStore.set(action.id);
       break;
   }
