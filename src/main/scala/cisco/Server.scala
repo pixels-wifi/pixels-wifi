@@ -5,6 +5,7 @@ import scala.concurrent.ExecutionContext
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Directives._
+import akka.http.scaladsl.model.headers._
 import akka.stream.ActorMaterializer
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import cisco.cache.cisco.cache.LruCache
@@ -55,26 +56,28 @@ object Server extends App {
     path("api") {
       get {
         parameters('ts.as[Long].?) { timestamp =>
-          timestamp match {
-            case Some(timestamp) =>
-              complete(statusCache(timestamp, { () =>
-                println("Computing status for " + timestamp)
-                val runningTalks = talksForTimestamp(timestamp).map(_.groupBy(_.location)
-                  .map { case (k, v) => k -> talkStatus(v.head) })
+          respondWithHeader(`Access-Control-Allow-Origin`.`*`) {
+            timestamp match {
+              case Some(timestamp) =>
+                complete(statusCache(timestamp, { () =>
+                  println("Computing status for " + timestamp)
+                  val runningTalks = talksForTimestamp(timestamp).map(_.groupBy(_.location)
+                    .map { case (k, v) => k -> talkStatus(v.head) })
 
-                runningTalks.map(rt => Status(Explorer.getAccessPointStatus(new DateTime(timestamp), new DateTime(timestamp + 3600000)), rt))
-              }))
-            case None =>
-              complete(for {
-                runningTalks <- talksForTimestamp(new DateTime().getMillis).map(_.groupBy(_.location)
-                  .map { case (k, v) => k -> talkStatus(v.head) })
-                currentData <- Explorer.current()
-              } yield Status(currentData, runningTalks))
+                  runningTalks.map(rt => Status(Explorer.getAccessPointStatus(new DateTime(timestamp), new DateTime(timestamp + 3600000)), rt))
+                }))
+              case None =>
+                complete(for {
+                  runningTalks <- talksForTimestamp(new DateTime().getMillis).map(_.groupBy(_.location)
+                    .map { case (k, v) => k -> talkStatus(v.head) })
+                  currentData <- Explorer.current()
+                } yield Status(currentData, runningTalks))
+            }
           }
         }
       }
     }
 
-  val bindingFuture = Http().bindAndHandle(route, "localhost", 8080)
+  val bindingFuture = Http().bindAndHandle(route, "0.0.0.0", 8080)
   bindingFuture.onComplete(_ => println("Server running on localhost:8080"))
 }
