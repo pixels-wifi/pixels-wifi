@@ -9,6 +9,8 @@ import com.github.nscala_time.time.Imports._
 import spray.json._
 import spray.json.DefaultJsonProtocol._
 
+import cisco.model.AccessPoint
+
 object Explorer {
   val DATA_DIR = "data"
 
@@ -70,9 +72,9 @@ object Explorer {
           println(s"Failed to parse ${file}")
       }
     }
-    mt.mapValues {
+    (AccessPoint.empty ++ mt.mapValues {
       case (g, b, r) =>
         AccessPointStatus(g.size, b.diff(g).size, r / files.size)
-    }.toMap
+    }.toMap).filter { case (k, _) => AccessPoint.list.contains(k) }.toMap
   }
 }
