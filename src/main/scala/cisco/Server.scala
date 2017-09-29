@@ -1,8 +1,6 @@
 package cisco
 
-import akka.util.Timeout
 import scala.concurrent.ExecutionContext
-import scala.concurrent.duration._
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
