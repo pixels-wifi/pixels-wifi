@@ -10,23 +10,23 @@ sealed trait Stage {
 }
 case object BrightPixel extends Stage {
   val name = "Bright Pixel Stage"
-  val aps = List("AP_Stage3_1", "AP_Stage3_2")
+  val aps = List("AP_MainEvent1", "AP_MainEvent2", "AP_MainEvent3", "AP_MainEvent10", "AP_MainEvent9")
 }
 case object BetaI extends Stage {
   val name = "Beta-i Stage"
-  val aps = List("AP_Stage3_1", "AP_Stage3_2")
+  val aps = List("AP_Stage3_1", "AP_Stage3_2", "AP_Betai", "AP_Zona_Passagem")
 }
 case object Nos extends Stage {
   val name = "NOS Stage"
-  val aps = List("AP_Stage3_1", "AP_Stage3_2")
+  val aps = List("AP_Stage2_1", "AP_Stage2_2", "AP_MainEvent7", "AP_MainEvent8", "AP_Entrada")
 }
 case object Segfault extends Stage {
   val name = "Segfault Stage"
-  val aps = List("AP_Stage3_1", "AP_Stage3_2")
+  val aps = List("AP_Stage4_1", "AP_Stage4_2")
 }
 case object Workshops extends Stage {
   val name = "Workshops"
-  val aps = List("AP_Stage3_1", "AP_Stage3_2")
+  val aps = List("AP_Workshop", "AP_Producao", "AP_MainEvent5")
 }
 case class Other(name: String) extends Stage {
   override val talkStage = false
