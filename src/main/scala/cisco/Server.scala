@@ -85,7 +85,7 @@ object Server extends App {
               self ! (ts + 3600000 * fs.size)
           }
         } else {
-          system.scheduler.scheduleOnce(10.minutes, self, ts + 3600000)
+          system.scheduler.scheduleOnce(1.minute, self, ts)
         }
     }
   }))
