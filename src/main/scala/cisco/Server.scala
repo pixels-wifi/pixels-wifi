@@ -1,6 +1,7 @@
 package cisco
 
 import scala.concurrent.ExecutionContext
+import scala.concurrent.duration._
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
@@ -51,6 +52,7 @@ object Server extends App {
   implicit val statusJF: RootJsonFormat[Status] = jsonFormat2(Status)
 
   val statusCache = LruCache[Status]()
+  val currentCache = LruCache[Status](1, 1, 5.seconds)
 
   val route =
     path("api") {
@@ -67,11 +69,13 @@ object Server extends App {
                   runningTalks.map(rt => Status(Explorer.getAccessPointStatus(new DateTime(timestamp), new DateTime(timestamp + 3600000)), rt))
                 }))
               case None =>
-                complete(for {
-                  runningTalks <- talksForTimestamp(new DateTime().getMillis).map(_.groupBy(_.location)
-                    .map { case (k, v) => k -> talkStatus(v.head) })
-                  currentData <- Explorer.current()
-                } yield Status(currentData, runningTalks))
+                complete(currentCache(0, { () =>
+                  for {
+                    runningTalks <- talksForTimestamp(new DateTime().getMillis).map(_.groupBy(_.location)
+                      .map { case (k, v) => k -> talkStatus(v.head) })
+                    currentData <- Explorer.current()
+                  } yield Status(currentData, runningTalks)
+                }))
             }
           }
         }
