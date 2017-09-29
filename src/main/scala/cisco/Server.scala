@@ -56,7 +56,8 @@ object Server extends App {
       get {
         complete(statusCache(timestamp, { () =>
           println("Computing status for " + timestamp)
-          val runningTalks = talksForTimestamp(timestamp).map(_.groupBy(_.location).mapValues(t => talkStatus(t.head)))
+          val runningTalks = talksForTimestamp(timestamp).map(_.groupBy(_.location)
+            .map { case (k, v) => k -> talkStatus(v.head) })
 
           runningTalks.map(rt => Status(Explorer.getAccessPointStatus(new DateTime(timestamp), new DateTime(timestamp + 3600000)), rt))
         }))
