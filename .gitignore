@@ -18,6 +18,7 @@ _site
 */native/libsigar*
 
 */src/main/resources/application.conf
+*/src/main/resources/dist
 
 node_modules
 data/*.json
