@@ -104,7 +104,10 @@ object Server extends App {
                     runningTalks <- talksForTimestamp(new DateTime().getMillis).map(_.groupBy(_.location)
                       .map { case (k, v) => k -> talkStatus(v.head) })
                     currentData <- Explorer.current()
-                  } yield Status(currentData, runningTalks)
+                  } yield Status(currentData.mapValues {
+                    case AccessPointStatus(g, b, r) =>
+                      AccessPointStatus(g * 3, b * 3, r)
+                  }.toMap, runningTalks)
                 }))
             }
           }
