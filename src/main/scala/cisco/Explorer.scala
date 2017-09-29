@@ -34,7 +34,7 @@ object Explorer {
 
   def getAccessPointStatus(start: DateTime, end: DateTime): Map[String, AccessPointStatus] = {
     val files = Explorer.getFiles(start, end)
-    val m = mutable.Map[String, AccessPointStatus]()
+    val mt = mutable.Map[String, (Set[String], Set[String], Double)]()
     files.foreach { file =>
       try {
         val json = Source.fromFile(DATA_DIR + "/" + file).getLines.mkString.parseJson
@@ -57,12 +57,12 @@ object Explorer {
                 (curr._1, curr._2 + entry.macAddress, curr._3 :+ entry.rssi)
               })
             }
-        }.mapValues { case (g, b, r) => (g.size, b.size, r.sum / (g.size + b.size)) }
+        }.mapValues { case (g, b, r) => (g, b, r.sum / (g.size + b.size)) }
         data.foreach {
           case (k, (g, b, r)) =>
-            m.update(k, {
-              val curr = m.getOrElse(k, AccessPointStatus(0, 0, 0))
-              curr.copy(goodUsers = curr.goodUsers + g, badUsers = curr.badUsers + b, avgRssi = curr.avgRssi + r)
+            mt.update(k, {
+              val curr = mt.getOrElse(k, (Set.empty[String], Set.empty[String], 0.0))
+              (curr._1 ++ g, curr._2 ++ b, curr._3 + r)
             })
         }
       } catch {
@@ -70,9 +70,9 @@ object Explorer {
           println(s"Failed to parse ${file}")
       }
     }
-    m.mapValues {
-      case AccessPointStatus(g, b, r) =>
-        AccessPointStatus(g / files.size, b / files.size, r / files.size)
+    mt.mapValues {
+      case (g, b, r) =>
+        AccessPointStatus(g.size, b.diff(g).size, r / files.size)
     }.toMap
   }
 }
