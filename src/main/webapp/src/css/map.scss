@@ -1,0 +1,58 @@
+.map-container {
+  position: relative;
+  //background-color: black;
+  //border: 1px solid black;
+  width: 950px;
+
+  img {
+    width: 100%;
+  }
+}
+
+.marker-container {
+  position: absolute;
+
+  .marker-inner {
+    position: relative;
+
+    .inner-circle {
+      position: absolute;
+      border-radius: 50%;
+      width: 12px;
+      height: 12px;
+      background-color: #4688F1;
+      border: 1px solid white;
+      box-shadow: 1px 1px 5px 0 rgba(0, 0, 0, 0.59);
+      cursor: pointer;
+      transform: translate(-50%, -50%);
+      transition: background 0.3s;
+
+      &:hover {
+        background-color: #3b5fba;
+        box-shadow: 1px 1px 7px 0 rgba(0, 0, 0, 0.59);
+      }
+    }
+
+    .hover-circle {
+      position: absolute;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      cursor: pointer;
+    }
+
+    .spread-circle {
+      position: absolute;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(211, 211, 211, 0.44);
+      //border: 1px solid rgba(128, 128, 128, 0.51);
+    }
+
+    .count-text {
+      margin-top: 5px;
+      margin-left: 5px;
+    }
+  }
+}
