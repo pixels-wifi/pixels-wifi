@@ -32,6 +32,8 @@ scalacOptions in (Test, console) := (scalacOptions in (Compile, console)).value
 
 scalariformSettings
 
+javaOptions in Universal ++= Seq("-J-Xmx5120m")
+
 ScalariformKeys.preferences := ScalariformKeys.preferences.value
   .setPreference(AlignParameters, true)
   .setPreference(DoubleIndentClassDeclaration, true)
