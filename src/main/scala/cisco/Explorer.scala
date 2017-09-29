@@ -93,9 +93,11 @@ object Explorer {
     if (Files.exists(Paths.get(filename)))
       Source.fromFile(filename).getLines.mkString.parseJson.convertTo[Map[String, AccessPointStatus]]
     else {
+      if (!Files.exists(Paths.get(DATA_CACHE))) new File(DATA_CACHE).mkdirs()
       val files = Explorer.getFiles(start, end)
       val res = parseStrings(files.map(file => Source.fromFile(DATA_DIR + "/" + file).getLines.mkString))
-      val writer = new PrintWriter(new File(filename))
+      val newFile = new File(filename)
+      val writer = new PrintWriter(newFile)
       writer.write(res.toJson.compactPrint)
       writer.close()
       res
