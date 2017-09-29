@@ -9,7 +9,7 @@ import com.github.nscala_time.time.Imports._
 import spray.json._
 import spray.json.DefaultJsonProtocol._
 
-object Explorer extends App {
+object Explorer {
   val DATA_DIR = "data"
 
   case class Entry(macAddress: String, status: String, currentApName: Option[String])
@@ -52,6 +52,4 @@ object Explorer extends App {
     }
     m.mapValues(_ / files.size).toMap
   }
-
-  Explorer.getAverageUsersPerAp("2017-09-28T16:04:00".toDateTime, "2017-09-28T16:05:00".toDateTime).foreach(println)
 }

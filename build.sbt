@@ -9,11 +9,13 @@ version := "0.1-SNAPSHOT"
 scalaVersion := "2.12.3"
 
 libraryDependencies ++= Seq(
-  "com.typesafe.akka"      %% "akka-http"   % "10.0.10",
-  "com.typesafe.akka"      %% "akka-stream" % "2.5.4",
-  "com.typesafe.akka"      %% "akka-actor"  % "2.5.4",
-  "com.github.nscala-time" %% "nscala-time" % "2.16.0",
-  "io.spray"               %%  "spray-json" % "1.3.3")
+  "com.typesafe.akka"      %% "akka-http"            % "10.0.10",
+  "com.typesafe.akka"      %% "akka-http-spray-json" % "10.0.10",
+  "com.typesafe.akka"      %% "akka-stream"          % "2.5.4",
+  "com.typesafe.akka"      %% "akka-actor"           % "2.5.4",
+  "com.github.nscala-time" %% "nscala-time"          % "2.16.0",
+  "com.googlecode.concurrentlinkedhashmap" % "concurrentlinkedhashmap-lru" % "1.4.2",
+  "io.spray"               %% "spray-json"           % "1.3.3")
 
 scalacOptions ++= Seq(
   "-deprecation",
