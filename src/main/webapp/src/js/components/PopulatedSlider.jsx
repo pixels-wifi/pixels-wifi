@@ -27,7 +27,7 @@ class PopulatedMap extends React.Component {
     this.setState({
       value: SliderStore.get()
     });
-  }
+  };
 
   onChange(value) {
     SliderActions.set(value);

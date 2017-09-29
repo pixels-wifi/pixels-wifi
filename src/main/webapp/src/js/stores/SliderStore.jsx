@@ -19,7 +19,6 @@ const SliderStore = lazy(EventEmitter.prototype).extend({
 AppDispatcher.register(function (action) {
   switch (action.actionType) {
     case SliderEvents.CHANGE_SLIDER:
-      console.log("store", action.id);
       SliderStore.set(action.id);
       break;
   }

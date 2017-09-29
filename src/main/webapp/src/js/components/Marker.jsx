@@ -57,8 +57,6 @@ class Marker extends React.Component {
     else if (quality <= -40)
       className = "Bad";
 
-    // console.log(x, y, count, diameter);
-
     return (
       <div className="marker-container" style={{top: y, left: x}}>
         <div className="marker-inner">

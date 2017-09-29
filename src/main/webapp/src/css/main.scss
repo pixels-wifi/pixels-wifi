@@ -113,3 +113,14 @@ body {
     color: #929597;
   }
 }
+
+.ant-table-thead > tr > th {
+  background: #ea292f;
+  color: white;
+  font-family: Avant Pixel;
+  text-transform: uppercase;
+}
+
+.my-padding {
+  padding: 10px 5px 5px 5px !important;
+}

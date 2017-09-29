@@ -14,7 +14,6 @@ AppDispatcher.register(function (action) {
       WifiStore.refresh(action);
       break;
     case WifiEvents.REQUEST_GET_SUCCESS:
-      console.log(action);
       WifiStore.onRequestSuccess(action);
       break;
     case WifiEvents.REQUEST_GET_ERROR:

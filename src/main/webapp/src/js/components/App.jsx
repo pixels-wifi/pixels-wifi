@@ -3,6 +3,7 @@ import React from "react";
 import PopulatedSlider from "./PopulatedSlider";
 import PopulatedMap from "./PopulatedMap";
 import InfoPanel from "./InfoPanel";
+import Talks from "./Talks";
 
 class App extends React.Component {
 
@@ -32,6 +33,7 @@ class App extends React.Component {
           color: "#ea292f",
           pointerEvents: "none"
         }}>WORKSHOPS</div>
+        <Talks />
       </div>
     );
   }

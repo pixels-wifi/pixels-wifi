@@ -41,11 +41,11 @@ const WifiActions = {
 
     // setTimeout(() => {
     //   console.log(id, mock);
-    //     AppDispatcher.dispatchNext({
-    //       actionType: WifiEvents.REQUEST_GET_SUCCESS,
-    //       id: id,
-    //       data: mock
-    //     });
+    //   AppDispatcher.dispatchNext({
+    //     actionType: WifiEvents.REQUEST_GET_SUCCESS,
+    //     id: id,
+    //     data: mock
+    //   });
     // }, 100)
 
     this.request({

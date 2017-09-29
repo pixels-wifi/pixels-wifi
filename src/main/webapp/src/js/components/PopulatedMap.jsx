@@ -54,7 +54,6 @@ class PopulatedMap extends React.Component {
   };
 
   onWifiStoreChange = (id) => {
-    console.log("wifi store changed", id, SliderStore.get());
     const sliderId = moment(WifiConstants.initial_data_timestamp).add(SliderStore.get(), "hour").unix() * 1000;
     if (id === sliderId || (id === "live" && SliderStore.get() === "live")) {
       this.cancelLivePolling();
