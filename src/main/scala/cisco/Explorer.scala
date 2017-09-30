@@ -90,7 +90,8 @@ object Explorer {
     val startTs = start.getMillis
     val endTs = end.getMillis
     val filename = s"$DATA_CACHE/$startTs-$endTs.json"
-    if (Files.exists(Paths.get(filename)))
+    val now = new DateTime()
+    if (Files.exists(Paths.get(filename)) && end < now)
       Source.fromFile(filename).getLines.mkString.parseJson.convertTo[Map[String, AccessPointStatus]]
     else {
       if (!Files.exists(Paths.get(DATA_CACHE))) new File(DATA_CACHE).mkdirs()
