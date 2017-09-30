@@ -7,6 +7,7 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.HttpRequest
 import akka.stream.ActorMaterializer
 import akka.util.ByteString
+import com.github.nscala_time.time.Imports._
 import org.joda.time.DateTime
 import org.joda.time.format.{ DateTimeFormat, DateTimeFormatter }
 import spray.json._
@@ -18,7 +19,7 @@ object Talk {
 
   case class CalendarTalk(SUMMARY: String, LOCATION: Stage, DTSTART: DateTime, DTEND: DateTime)
 
-  def fromCalendarTalk(ct: CalendarTalk) = Talk(ct.SUMMARY, ct.LOCATION, ct.DTSTART, ct.DTEND)
+  def fromCalendarTalk(ct: CalendarTalk) = Talk(ct.SUMMARY, ct.LOCATION, ct.DTSTART - 1.hour, ct.DTEND - 1.hour)
 
   implicit val dateTimeJsonFormat: JsonFormat[DateTime] = new JsonFormat[DateTime] {
     val parser: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ssZ")
