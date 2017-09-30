@@ -49,7 +49,7 @@ const WifiActions = {
     // }, 100)
 
     this.request({
-      // url: "http://88.157.243.197:8080" + "/api",
+      // url: "http://52.174.46.185:8080" + "/api",
       url:  "/api",
       params: params
     }).then(data => {

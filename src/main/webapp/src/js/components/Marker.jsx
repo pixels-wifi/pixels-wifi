@@ -50,11 +50,11 @@ class Marker extends React.Component {
     const diameter = this.countToDiameter(count);
 
     let className = "";
-    if (quality > -50)
+    if (quality > -55)
       className = "Good"
-    else if (quality > -70)
+    else if (quality > -75)
       className = "Average"
-    else if (quality <= -70)
+    else if (quality <= -75)
       className = "Bad";
 
     return (
