@@ -22,6 +22,7 @@ class App extends React.Component {
            left: 601,
            fontSize: "135%",
            color: "#ea292f",
+           zIndex: 0,
            pointerEvents: "none"
          }}>FOOD</div>
         <div className="pixels-font" style={{
@@ -31,6 +32,7 @@ class App extends React.Component {
           left: 591,
           fontSize: "91%",
           color: "#ea292f",
+          zIndex: 0,
           pointerEvents: "none"
         }}>WORKSHOPS</div>
         <Talks />

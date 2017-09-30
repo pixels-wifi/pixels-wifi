@@ -38,6 +38,7 @@
     .marker-container .marker-inner .spread-circle {
       position: absolute;
       border-radius: 50%;
+      z-index: 1;
       -webkit-transform: translate(-50%, -50%);
               transform: translate(-50%, -50%);
       background-color: rgba(211, 211, 211, 0.44);
