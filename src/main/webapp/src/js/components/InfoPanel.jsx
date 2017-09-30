@@ -38,6 +38,8 @@ class InfoPanel extends React.Component {
       const l = moment(wifiConfig.initial_data_timestamp).add(value + 1, "hour").format("H");
 
       return {f: `${f}-${l}h`, l: day};
+    } else {
+      return {f: "Real Time", l: ""};
     }
   };
 
