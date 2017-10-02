@@ -64,8 +64,7 @@ const marks = {
   // 51: '19h',
   // 52: '20h',
   // 53: '21h',
-  // 54: '22h',
-  55: '23h'
+  54: '22h'
 };
 
 const realTimeLabel = {
@@ -94,7 +93,7 @@ class DaySlider extends React.Component {
 
   realMarks() {
     const a = _.pickBy(marks);
-    /* a[maxStep] = realTimeLabel;*/
+    a[maxStep] = realTimeLabel;
     return a;
   }
 
@@ -111,7 +110,7 @@ class DaySlider extends React.Component {
   render() {
     return (
       <Slider
-        marks={this.realMarks()}
+        marks={marks}
         max={maxStep}
         value={this.value()}
         onChange={this.onChange}
