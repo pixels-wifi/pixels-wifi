@@ -4,7 +4,7 @@ import AppDispatcher from "app/AppDispatcher";
 
 import SliderEvents from "app/events/SliderEvents";
 
-var current = "live";
+var current = 55;
 
 const SliderStore = lazy(EventEmitter.prototype).extend({
   set(id) {

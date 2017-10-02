@@ -65,6 +65,7 @@ const marks = {
   // 52: '20h',
   // 53: '21h',
   // 54: '22h',
+  55: '23h'
 };
 
 const realTimeLabel = {
@@ -81,10 +82,6 @@ const maxStep = Math.min(55, actualStepHour);
 class DaySlider extends React.Component {
 
   formatter(value) {
-    if (value === maxStep) {
-      return "Real time updates";
-    }
-
     const day = moment(wifiConfig.initial_data_timestamp)
       .add(value, "hour")
       .format("Do MMM");
@@ -96,25 +93,19 @@ class DaySlider extends React.Component {
   }
 
   realMarks() {
-    const a = _.pickBy(marks, (m, k) => k < maxStep);
-    a[maxStep] = realTimeLabel;
+    const a = _.pickBy(marks);
+    /* a[maxStep] = realTimeLabel;*/
     return a;
   }
 
   onChange = (value) => {
-    if (value === maxStep) {
-      this.props.onChange("live")
-    } else if (value !== undefined && value !== null) {
+    if (value !== undefined && value !== null) {
       this.props.onChange(value);
     }
   };
 
   value = () => {
-    if (this.props.value === "live") {
-      return maxStep;
-    } else {
-      return this.props.value;
-    }
+    return this.props.value;
   };
 
   render() {

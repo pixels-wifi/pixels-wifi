@@ -91,18 +91,18 @@ object Explorer {
     val endTs = end.getMillis
     val filename = s"$DATA_CACHE/$startTs-$endTs.json"
     val now = new DateTime()
-    if (Files.exists(Paths.get(filename)) && end < now)
-      Source.fromFile(filename).getLines.mkString.parseJson.convertTo[Map[String, AccessPointStatus]]
-    else {
-      if (!Files.exists(Paths.get(DATA_CACHE))) new File(DATA_CACHE).mkdirs()
-      val files = Explorer.getFiles(start, end)
-      val res = parseStrings(files.map(file => Source.fromFile(DATA_DIR + "/" + file).getLines.mkString))
-      val newFile = new File(filename)
-      val writer = new PrintWriter(newFile)
-      writer.write(res.toJson.compactPrint)
-      writer.close()
-      res
-    }
+    // if (Files.exists(Paths.get(filename)) && end < now)
+    //   Source.fromFile(filename).getLines.mkString.parseJson.convertTo[Map[String, AccessPointStatus]]
+    // else {
+    //   if (!Files.exists(Paths.get(DATA_CACHE))) new File(DATA_CACHE).mkdirs()
+    val files = Explorer.getFiles(start, end)
+    val res = parseStrings(files.map(file => Source.fromFile(DATA_DIR + "/" + file).getLines.mkString))
+    // val newFile = new File(filename)
+    // val writer = new PrintWriter(newFile)
+    // writer.write(res.toJson.compactPrint)
+    // writer.close()
+    res
+    // }
   }
 
   def current()(implicit system: ActorSystem, ec: ExecutionContext, mat: ActorMaterializer): Future[Map[String, AccessPointStatus]] =

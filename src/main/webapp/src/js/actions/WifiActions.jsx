@@ -14,24 +14,20 @@ const WifiActions = {
     var id;
     const params = {};
 
-    if (tick) {
-      const ts = moment(WifiConstants.initial_data_timestamp).add(tick, "hour").unix() * 1000;
-      id = ts;
-      params["ts"] = ts;
-      if (_.has(WifiStore.get(id), "data.accessPoints")) {
-        AppDispatcher.dispatchNext({
-          actionType: WifiEvents.REQUEST_GET,
-          id: id
-        });
+    const ts = moment(WifiConstants.initial_data_timestamp).add(tick, "hour").unix() * 1000;
+    id = ts;
+    params["ts"] = ts;
+    if (_.has(WifiStore.get(id), "data.accessPoints")) {
+      AppDispatcher.dispatchNext({
+        actionType: WifiEvents.REQUEST_GET,
+        id: id
+      });
 
-        AppDispatcher.dispatchNext({
-          actionType: WifiEvents.REQUEST_GET_CACHED,
-          id: id
-        });
-        return;
-      }
-    } else {
-      id = "live"
+      AppDispatcher.dispatchNext({
+        actionType: WifiEvents.REQUEST_GET_CACHED,
+        id: id
+      });
+      return;
     }
 
     AppDispatcher.dispatchNext({
@@ -49,9 +45,9 @@ const WifiActions = {
     // }, 100)
 
     this.request({
-      // url: "http://52.174.46.185:8080" + "/api",
-      url:  "/api",
-      params: params
+      /* url: "http://52.174.46.185:8080" + "/api",*/
+      /* url: "http://localhost:8080" + "/api",*/
+      url:  "api/" + ts + ".json"
     }).then(data => {
       AppDispatcher.dispatchNext({
         actionType: WifiEvents.REQUEST_GET_SUCCESS,

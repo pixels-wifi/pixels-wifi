@@ -1,5 +1,7 @@
 package cisco
 
+import java.io.{ File, PrintWriter }
+
 import akka.actor._
 import scala.concurrent._
 import scala.concurrent.duration._
@@ -62,33 +64,40 @@ object Server extends App {
     val runningTalks = talksForTimestamp(timestamp).map(_.groupBy(_.location)
       .map { case (k, v) => k -> talkStatus(v.head) })
 
-    runningTalks.map(rt => Status(Explorer.getAccessPointStatus(new DateTime(timestamp), new DateTime(timestamp + 3600000)), rt))
+    runningTalks.map { rt =>
+      val status = Status(Explorer.getAccessPointStatus(new DateTime(timestamp), new DateTime(timestamp + 3600000)), rt)
+      val newFile = new File(s"api/$timestamp.json")
+      val writer = new PrintWriter(newFile)
+      writer.write(status.toJson.compactPrint)
+      writer.close()
+      status
+    }
   }
 
-  system.actorOf(Props(new Actor {
-    override def preStart() {
-      self ! START_TIMESTAMP
-    }
+  // system.actorOf(Props(new Actor {
+  //   override def preStart() {
+  //     self ! START_TIMESTAMP
+  //   }
 
-    def receive = {
-      case ts: Long =>
-        val curr = new DateTime().getMillis
-        if (ts + 3600000 < curr) {
-          val fs = (0 until N_SIM_REQUESTS).map { t =>
-            if (ts + 3600000 * (t + 1) < curr)
-              Some(statusCache(ts + 3600000 * t, status(ts + 3600000 * t)))
-            else
-              None
-          }.flatten
-          Future.sequence(fs).onComplete {
-            case _ =>
-              self ! (ts + 3600000 * fs.size)
-          }
-        } else {
-          system.scheduler.scheduleOnce(1.minute, self, ts)
-        }
-    }
-  }))
+  //   def receive = {
+  //     case ts: Long =>
+  //       val curr = new DateTime().getMillis
+  //       if (ts + 3600000 < curr) {
+  //         val fs = (0 until N_SIM_REQUESTS).map { t =>
+  //           if (ts + 3600000 * (t + 1) < curr)
+  //             Some(statusCache(ts + 3600000 * t, status(ts + 3600000 * t)))
+  //           else
+  //             None
+  //         }.flatten
+  //         Future.sequence(fs).onComplete {
+  //           case _ =>
+  //             self ! (ts + 3600000 * fs.size)
+  //         }
+  //       } else {
+  //         system.scheduler.scheduleOnce(1.minute, self, ts)
+  //       }
+  //   }
+  // }))
 
   val route =
     path("api") {
