@@ -128,3 +128,32 @@ body {
 .ant-table-tbody {
   font-size: 113%;
 }
+
+.footer {
+  font-size: 120%;
+
+  border-top: 1px solid #e4e4e4;
+
+  padding-top: 40px;
+  padding-bottom: 40px;
+  display: flex;
+  justify-content: space-between;
+
+  .pixels {
+    color: black;
+    font-weight: bolder;
+  }
+
+  .span {
+    vertical-align: middle;
+  }
+
+  .github-i {
+    background: url(/img/github.svg);
+    width: 14px;
+    background-size: 100%;
+    height: 14px;
+    display: inline-block;
+    margin: 0px 4px;
+  }
+}

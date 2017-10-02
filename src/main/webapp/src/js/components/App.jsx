@@ -4,6 +4,7 @@ import PopulatedSlider from "./PopulatedSlider";
 import PopulatedMap from "./PopulatedMap";
 import InfoPanel from "./InfoPanel";
 import Talks from "./Talks";
+import Footer from "./Footer";
 
 class App extends React.Component {
 
@@ -36,6 +37,7 @@ class App extends React.Component {
           pointerEvents: "none"
         }}>WORKSHOPS</div>
         <Talks />
+        <Footer />
       </div>
     );
   }
