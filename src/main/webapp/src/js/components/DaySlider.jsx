@@ -76,7 +76,7 @@ const realTimeLabel = {
 
 //1506802266000
 const actualStepHour = moment().diff(wifiConfig.initial_data_timestamp, "hour");
-const maxStep = Math.min(55, actualStepHour);
+const maxStep = Math.min(54, actualStepHour);
 
 class DaySlider extends React.Component {
 
